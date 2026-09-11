@@ -43,7 +43,7 @@ export default function NewGroupForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-purple-900">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-pink-900">
       <div>
         <label htmlFor="name" className="block text-sm font-medium">
           Group Name

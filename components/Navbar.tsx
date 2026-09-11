@@ -16,7 +16,7 @@ export default function Navbar() {
   return (
     <nav className="flex items-center justify-between border-b px-6 py-4">
       <div className="flex items-center gap-6">
-        <span className="font-bold text-lg text-purple-900">StudyBoard</span>
+        <span className="font-bold text-lg text-pink-900">StudyBoard</span>
         <div className="flex gap-4">
           {links.map((link) => {
             const isActive = pathname === link.href;
@@ -26,8 +26,8 @@ export default function Navbar() {
                 href={link.href}
                 className={
                   isActive
-                    ? "font-semibold text-purple-600"
-                    : "text-gray-600 hover:text-purple-600"
+                    ? "font-semibold text-pink-600"
+                    : "text-gray-600 hover:text-pink-600"
                 }
               >
                 {link.label}
@@ -39,8 +39,8 @@ export default function Navbar() {
               href="/groups/new"
               className={
                 pathname === "/groups/new"
-                  ? "font-semibold text-purple-600"
-                  : "text-gray-600 hover:text-purple-600"
+                  ? "font-semibold text-pink-600"
+                  : "text-gray-600 hover:text-pink-600"
               }
             >
               New Group
@@ -52,10 +52,10 @@ export default function Navbar() {
       <div className="flex items-center gap-4 text-sm">
         {status === "authenticated" ? (
           <>
-            <span className="text-purple-600">Hello, {session?.user?.name}</span>
+            <span className="text-pink-600">Hello, {session?.user?.name}</span>
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="text-gray-600 hover:text-purple-600"
+              className="text-gray-600 hover:text-pink-600"
             >
               Sign Out
             </button>
@@ -64,10 +64,10 @@ export default function Navbar() {
         : 
         (
           <>
-            <Link href="/login" className="text-gray-600 hover:text-purple-600">
+            <Link href="/login" className="text-gray-600 hover:text-pink-600">
               Log In
             </Link>
-            <Link href="/register" className="text-gray-600 hover:text-purple-600">
+            <Link href="/register" className="text-gray-600 hover:text-pink-600">
               Register
             </Link>
           </>

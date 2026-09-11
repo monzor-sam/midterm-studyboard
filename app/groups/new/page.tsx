@@ -19,7 +19,7 @@ export default async function NewGroupPage() {
   }
   return (
     <div className="mx-auto max-w-md">
-      <h1 className="text-3xl font-bold text-purple-950">Create a New Group</h1>
+      <h1 className="text-3xl font-bold text-pink-950">Create a New Group</h1>
       <div className="mt-6">
         <NewGroupForm />
       </div>

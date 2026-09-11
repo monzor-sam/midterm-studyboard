@@ -12,14 +12,14 @@ export default function TaskItem({ task }: { task: Task }) {
   const [done, setDone] = useState(task.done);
 
   return (
-    <li className="flex items-center gap-3 rounded-md border px-3 py-2 text-purple-700 hover:bg-purple-50">
+    <li className="flex items-center gap-3 rounded-md border px-3 py-2 text-pink-700 hover:bg-pink-100">
       <input
         type="checkbox"
         checked={done}
         onChange={() => setDone(!done)}
         className="h-4 w-4"
       />
-      <span className={done ? "line-through text-purple-400" : ""}>
+      <span className={done ? "line-through text-pink-400" : ""}>
         {task.title}
       </span>
     </li>
