@@ -10,7 +10,31 @@ export default function DeleteGroupButton({ groupId }: { groupId: string }) {
   const [error, setError] = useState("");
 
   async function handleDelete() {
-    setError("TODO: implement delete-group handler");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this group? This can't be undone."
+    );
+    if (!confirmed) return;
+
+    setIsDeleting(true);
+    setError("");
+
+    try {
+      const res = await fetch(`/api/groups/${groupId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        setIsDeleting(false);
+        setError("Couldn't delete group.");
+        return;
+      }
+
+      router.push("/groups");
+      router.refresh();
+    } catch {
+      setIsDeleting(false);
+      setError("Couldn't delete group.");
+    }
   }
 
   return (

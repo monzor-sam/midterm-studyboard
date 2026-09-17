@@ -1,9 +1,8 @@
 "use client";
 
-import {useState, FormEvent} from "react";
+import { useState, FormEvent } from "react";
 import { useRouter } from 'next/navigation';
 import Button from "./Button";
-import { title } from "process";
 
 export default function NewTaskForm({ groupId }: { groupId: string }) {
     const router = useRouter();
@@ -13,7 +12,30 @@ export default function NewTaskForm({ groupId }: { groupId: string }) {
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
-        setError("TODO: implement add-task submit handler");
+        setError("");
+        setIsSubmitting(true);
+
+        try {
+            const res = await fetch(`/api/groups/${groupId}/tasks`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title }),
+            });
+
+            if (!res.ok) {
+                const data = await res.json().catch(() => null);
+                setError(data?.message ?? "Couldn't add task.");
+                setIsSubmitting(false);
+                return;
+            }
+
+            setTitle("");
+            router.refresh();
+        } catch {
+            setError("Couldn't add task.");
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     return (

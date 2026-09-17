@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { getGroupById } from "@/lib/data";
 import TaskItem from "@/components/TaskItem";
+import DeleteGroupButton from "@/components/DeleteGroupButton";
+import NewTaskForm from "@/components/NewTaskForm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -9,7 +11,6 @@ export default async function GroupDetailPage({
 }: {
   params: { id: string };
 }) {
-  // const group = await getGroupById(params.id);
   const [group, session] = await Promise.all([
     getGroupById(params.id),
     getServerSession(authOptions),
@@ -23,7 +24,10 @@ export default async function GroupDetailPage({
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-pink-950">{group.name}</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-pink-950">{group.name}</h1>
+        {isOwner && <DeleteGroupButton groupId={group.id} />}
+      </div>
       <p className="text-pink-800">
         {group.subject} · {group.memberCount} members · Created by{" "}
         {group.owner.name}
@@ -32,14 +36,16 @@ export default async function GroupDetailPage({
       <h2 className="mt-8 text-lg font-semibold text-pink-950">Tasks</h2>
       <ul className="mt-3 flex flex-col gap-2">
         {group.tasks.map((task) => (
-          <TaskItem key=
-            {task.id} 
-            task={task} 
-            // isOwner={isOwner} 
-            // groupId={group.id}
+          <TaskItem
+            key={task.id}
+            task={task}
+            isOwner={isOwner}
+            groupId={group.id}
           />
         ))}
       </ul>
+
+      {isOwner && <NewTaskForm groupId={group.id} />}
     </div>
   );
 }
