@@ -17,7 +17,7 @@ export default async function GroupsPage() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-pink-950">All Groups</h1>
+        <h1 className="text-3xl font-bold text-pink-900">All Groups</h1>
         {session && 
           <Link
             href="/groups/new"

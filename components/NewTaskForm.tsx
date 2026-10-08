@@ -39,7 +39,7 @@ export default function NewTaskForm({ groupId }: { groupId: string }) {
     }
 
     return (
-        <div>
+        <div className="mt-4">
             <form onSubmit={handleSubmit} className="flex gap-2">
                 <input
                     type="text"

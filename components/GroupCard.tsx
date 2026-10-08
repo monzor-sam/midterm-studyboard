@@ -10,7 +10,7 @@ export default function GroupCard({ group }: { group: Group }) {
       href={`/groups/${group.id}`}
       className="block rounded-lg border p-4 hover:shadow-md transition-shadow"
     >
-      <h3 className="text-lg font-semibold text-pink-950">{group.name}</h3>
+      <h3 className="text-lg font-semibold text-pink-900">{group.name}</h3>
       <p className="text-sm text-pink-500">{group.subject}</p>
       <div className="mt-2 flex justify-between text-sm text-pink-600">
         <span>{group.memberCount} members</span>

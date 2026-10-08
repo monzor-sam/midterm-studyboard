@@ -1,31 +1,39 @@
 import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
-import { rateLimit } from "./lib/rate-limit";
+import type { NextRequest } from "next/server";
+import { rateLimit } from "@/lib/rate-limit";
 
-const LIMIT = 5;
-const WINDOW_MS = 60_000;
+const LIMITS: Record<string, { limit: number; windowMs: number }> = {
+  "/api/register": { limit: 5, windowMs: 60_000 },
+  "/api/auth/callback/credentials": { limit: 5, windowMs: 60_000 },
+  "/api/books": { limit: 20, windowMs: 60_000 },
+};
 
 export function middleware(request: NextRequest) {
-    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-    const key = `${ip}:${request.nextUrl.pathname}`
+  const pathname = request.nextUrl.pathname;
+  const rule = LIMITS[pathname];
 
-    const {success, remaining} = rateLimit(key, LIMIT, WINDOW_MS)
+  if (!rule) {
+    return NextResponse.next();
+  }
 
-    if ( !success ){
-        return NextResponse.json(
-            { error: "Too many request, please try again later"},
-            { status: 429 }
-        );
-    }
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    "unknown";
+  const key = `${ip}:${pathname}`;
+  const { success, remaining } = rateLimit(key, rule.limit, rule.windowMs);
 
-    const response = NextResponse.next();
-    response.headers.set("X-RateLimit-Remaining", String(remaining))
-    return response;
+  if (!success) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again in a minute." },
+      { status: 429 }
+    );
+  }
+
+  const response = NextResponse.next();
+  response.headers.set("X-RateLimit-Remaining", String(remaining));
+  return response;
 }
 
 export const config = {
-    matcher: [
-        "/api/register",
-        "/api/auth/callback/credentials"
-    ],
+  matcher: ["/api/register", "/api/auth/callback/credentials", "/api/books"],
 };
