@@ -3,12 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Task } from "@/lib/data";
-
-// "use client" is required because this component owns interactive state
-// (useState) and responds to a click event. Note: since there's no backend
-// yet, toggling here only affects this component's local state and will
-// reset on page refresh — real persistence arrives in Week 5 (database)
-// and Week 4 (API routes).
+import { socket } from "@/lib/socketClient";
 
 export default function TaskItem({
   task,
@@ -35,7 +30,10 @@ export default function TaskItem({
 
     const res = await fetch(`/api/groups/${groupId}/tasks/${task.id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Socket-Id": socket.id ?? "",
+      },
       body: JSON.stringify({ done: newValue }),
     });
 
