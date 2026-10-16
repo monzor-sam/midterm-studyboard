@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import { useRouter } from 'next/navigation';
 import Button from "./Button";
+import { socket } from "@/lib/socketClient";
 
 export default function NewTaskForm({ groupId }: { groupId: string }) {
     const router = useRouter();
@@ -15,29 +16,27 @@ export default function NewTaskForm({ groupId }: { groupId: string }) {
         setError("");
         setIsSubmitting(true);
 
-        try {
-            const res = await fetch(`/api/groups/${groupId}/tasks`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ title }),
+        const res = await fetch(`/api/groups/${groupId}/tasks`, {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "X-Socket-Id": socket.id ?? "",
+            },
+            body: JSON.stringify({ title }),
             });
+            
+            setIsSubmitting(false);
 
             if (!res.ok) {
-                const data = await res.json().catch(() => null);
-                setError(data?.message ?? "Couldn't add task.");
-                setIsSubmitting(false);
+                const data = await res.json();
+                setError(data.error ?? "Something went wrong.");
                 return;
             }
 
             setTitle("");
             router.refresh();
-        } catch {
-            setError("Couldn't add task.");
-        } finally {
-            setIsSubmitting(false);
         }
-    }
-
+        
     return (
         <div className="mt-4">
             <form onSubmit={handleSubmit} className="flex gap-2">

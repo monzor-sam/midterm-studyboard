@@ -7,6 +7,7 @@ import DeleteGroupButton from "@/components/DeleteGroupButton";
 import NewTaskForm from "@/components/NewTaskForm";
 import BookSearch from "@/components/BookSearch";
 import AISubtaskGenerator from "@/components/AISubtaskGenerator";
+import RealtimeNotifications from "@/components/RealtimeNotifications";
 
 export default async function GroupDetailPage({
   params,
@@ -70,6 +71,7 @@ export default async function GroupDetailPage({
             <AISubtaskGenerator groupId={group.id} />
           </div>
         )}
+        <RealtimeNotifications groupId={group.id} />
     </div>
   );
 }
